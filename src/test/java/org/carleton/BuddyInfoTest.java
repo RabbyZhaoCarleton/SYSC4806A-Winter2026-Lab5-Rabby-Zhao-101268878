@@ -37,4 +37,21 @@ class BuddyInfoTest {
     void getAddress() {
         assertEquals("123 Main St, Carleton, ON", buddy.getAddress());
     }
+
+    @Test
+    void nicknameIsNullWhenNotGiven() {
+        assertNull(buddy.getNickname());
+    }
+
+    @Test
+    void getNickname() {
+        BuddyInfo withNickname = new BuddyInfo("Rabby", "Rabby@gmail.com", "123-456-7890", "123 Main St, Carleton, ON", "Rab");
+        assertEquals("Rab", withNickname.getNickname());
+    }
+
+    @Test
+    void setNickname() {
+        buddy.setNickname("Rab");
+        assertEquals("Rab", buddy.getNickname());
+    }
 }

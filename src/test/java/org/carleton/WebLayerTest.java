@@ -214,4 +214,25 @@ class WebLayerTest {
                         .contains("Rabby@gmail.com")
                         .contains("123 Main St, Carleton, ON"));
     }
+
+    @Test
+    void nicknameAppearsInJsonAndView() {
+        rabby.setNickname("Rab");
+        book.addBuddy(rabby);
+        when(addressBookRepository.findById(1L)).thenReturn(book);
+
+        restTestClient.get().uri("/addressbooks/1")
+                .exchange()
+                .expectStatus().isOk()
+                .expectBody()
+                .jsonPath("$.buddyList[0].nickname").isEqualTo("Rab");
+
+        restTestClient.get().uri("/view/addressbooks/1")
+                .exchange()
+                .expectStatus().isOk()
+                .expectBody(String.class)
+                .consumeWith(result -> assertThat(result.getResponseBody())
+                        .contains("<th>Nickname</th>")
+                        .contains("<td>Rab</td>"));
+    }
 }

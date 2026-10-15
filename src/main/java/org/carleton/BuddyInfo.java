@@ -13,6 +13,7 @@ public class BuddyInfo {
     private String email;
     private String phone;
     private String address;
+    private String nickname;
 
     public BuddyInfo() {}
 
@@ -21,6 +22,11 @@ public class BuddyInfo {
         this.email = email;
         this.phone = phone;
         this.address = address;
+    }
+
+    public BuddyInfo(String name, String email, String phone, String address, String nickname) {
+        this(name, email, phone, address);
+        this.nickname = nickname;
     }
 
     public Long getId() {
@@ -63,9 +69,17 @@ public class BuddyInfo {
         this.address = address;
     }
 
+    public String getNickname() {
+        return nickname;
+    }
+
+    public void setNickname(String nickname) {
+        this.nickname = nickname;
+    }
+
     @Override
     public String toString() {
-        return String.format("BuddyInfo[id=%d, name='%s', email='%s', phone='%s', address='%s']",
-                id, name, email, phone, address);
+        return String.format("BuddyInfo[id=%d, name='%s', email='%s', phone='%s', address='%s', nickname='%s']",
+                id, name, email, phone, address, nickname);
     }
 }

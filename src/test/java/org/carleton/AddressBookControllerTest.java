@@ -212,4 +212,32 @@ class AddressBookControllerTest {
                 .exchange()
                 .expectStatus().isNotFound();
     }
+
+    @Test
+    void nicknameIsSavedAndShownInJsonAndView() {
+        long bookId = createBook();
+
+        restTestClient.post().uri("/addressbooks/" + bookId + "/buddies")
+                .contentType(MediaType.APPLICATION_JSON)
+                .body("""
+                        {"name":"Rabby","email":"Rabby@gmail.com","phone":"123-456-7890","address":"123 Main St, Carleton, ON","nickname":"Rab"}""")
+                .exchange()
+                .expectStatus().isCreated()
+                .expectBody()
+                .jsonPath("$.buddyList[0].nickname").isEqualTo("Rab");
+
+        restTestClient.get().uri("/addressbooks/" + bookId)
+                .exchange()
+                .expectStatus().isOk()
+                .expectBody()
+                .jsonPath("$.buddyList[0].nickname").isEqualTo("Rab");
+
+        restTestClient.get().uri("/view/addressbooks/" + bookId)
+                .exchange()
+                .expectStatus().isOk()
+                .expectBody(String.class)
+                .consumeWith(result -> assertThat(result.getResponseBody())
+                        .contains("<th>Nickname</th>")
+                        .contains("<td>Rab</td>"));
+    }
 }

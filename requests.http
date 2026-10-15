@@ -17,7 +17,8 @@ Content-Type: application/json
   "name": "Rabby",
   "email": "Rabby@gmail.com",
   "phone": "123-456-7890",
-  "address": "123 Main St, Carleton, ON"
+  "address": "123 Main St, Carleton, ON",
+  "nickname": "Rab"
 }
 
 ### 4. Create another buddy inside address book #1  (buddy id 2)
