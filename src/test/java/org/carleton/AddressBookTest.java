@@ -4,6 +4,9 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import java.io.ByteArrayOutputStream;
+import java.io.PrintStream;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 class AddressBookTest {
@@ -47,5 +50,18 @@ class AddressBookTest {
         addressBook.addBuddy(inBook);
         assertTrue(addressBook.containsBuddy(inBook));
         assertFalse(addressBook.containsBuddy(notInBook));
+    }
+
+    @Test
+    void sayHello() {
+        PrintStream originalOut = System.out;
+        ByteArrayOutputStream captured = new ByteArrayOutputStream();
+        System.setOut(new PrintStream(captured));
+        try {
+            addressBook.sayHello();
+        } finally {
+            System.setOut(originalOut);
+        }
+        assertEquals("Hello from AddressBook!" + System.lineSeparator(), captured.toString());
     }
 }

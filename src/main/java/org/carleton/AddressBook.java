@@ -55,6 +55,10 @@ public class AddressBook {
         return buddyListString.toString();
     }
 
+    public void sayHello() {
+        System.out.println("Hello from AddressBook!");
+    }
+
     public boolean containsBuddy(BuddyInfo buddy) {
         return buddyList.contains(buddy);
     }
