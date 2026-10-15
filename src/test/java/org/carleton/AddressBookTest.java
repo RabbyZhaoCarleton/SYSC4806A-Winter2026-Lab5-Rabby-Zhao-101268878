@@ -42,5 +42,10 @@ class AddressBookTest {
 
     @Test
     void containsBuddy() {
+        BuddyInfo inBook = new BuddyInfo("Rabby", "Rabby@gmail.com", "123-456-7890", "123 Main St, Carleton, ON");
+        BuddyInfo notInBook = new BuddyInfo("Jane", "Jane@gmail.com", "987-654-3210", "456 Elm St, Toronto, ON");
+        addressBook.addBuddy(inBook);
+        assertTrue(addressBook.containsBuddy(inBook));
+        assertFalse(addressBook.containsBuddy(notInBook));
     }
 }
