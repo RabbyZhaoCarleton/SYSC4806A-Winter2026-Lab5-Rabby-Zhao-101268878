@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Address Books</title>
+</head>
+<body>
+<h1>Address Books</h1>
+
+<p th:if="${#lists.isEmpty(addressBooks)}">No address books yet.</p>
+
+<ul th:unless="${#lists.isEmpty(addressBooks)}">
+    <li th:each="book : ${addressBooks}">
+        <a th:href="@{/view/addressbooks/{id}(id=${book.id})}"
+           th:text="'Address Book #' + ${book.id} + ' (' + ${#lists.size(book.buddyList)} + ' buddies)'">Address Book</a>
+    </li>
+</ul>
+</body>
+</html>

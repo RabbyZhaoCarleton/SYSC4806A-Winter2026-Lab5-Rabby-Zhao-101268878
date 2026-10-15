@@ -235,4 +235,36 @@ class WebLayerTest {
                         .contains("<th>Nickname</th>")
                         .contains("<td>Rab</td>"));
     }
+
+    @Test
+    void homepageListsAddressBooks() {
+        book.addBuddy(rabby);
+        AddressBook other = new AddressBook();
+        other.setId(2L);
+        when(addressBookRepository.findAll()).thenReturn(List.of(book, other));
+
+        restTestClient.get().uri("/")
+                .exchange()
+                .expectStatus().isOk()
+                .expectBody(String.class)
+                .consumeWith(result -> assertThat(result.getResponseBody())
+                        .contains("href=\"/view/addressbooks/1\"")
+                        .contains("Address Book #1 (1 buddies)")
+                        .contains("href=\"/view/addressbooks/2\"")
+                        .contains("Address Book #2 (0 buddies)")
+                        .doesNotContain("No address books yet."));
+    }
+
+    @Test
+    void homepageWithNoAddressBooksShowsMessage() {
+        when(addressBookRepository.findAll()).thenReturn(List.of());
+
+        restTestClient.get().uri("/")
+                .exchange()
+                .expectStatus().isOk()
+                .expectBody(String.class)
+                .consumeWith(result -> assertThat(result.getResponseBody())
+                        .contains("No address books yet.")
+                        .doesNotContain("<li>"));
+    }
 }

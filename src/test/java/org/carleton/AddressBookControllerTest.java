@@ -240,4 +240,24 @@ class AddressBookControllerTest {
                         .contains("<th>Nickname</th>")
                         .contains("<td>Rab</td>"));
     }
+
+    @Test
+    void homepageLinksToEachAddressBook() {
+        long bookId = createBook();
+        restTestClient.post().uri("/addressbooks/" + bookId + "/buddies")
+                .contentType(MediaType.APPLICATION_JSON)
+                .body(new BuddyInfo("Rabby", "Rabby@gmail.com", "123-456-7890", "123 Main St, Carleton, ON"))
+                .exchange()
+                .expectStatus().isCreated();
+
+        restTestClient.get().uri("/")
+                .exchange()
+                .expectStatus().isOk()
+                .expectHeader().contentTypeCompatibleWith(MediaType.TEXT_HTML)
+                .expectBody(String.class)
+                .consumeWith(result -> assertThat(result.getResponseBody())
+                        .contains("<h1>Address Books</h1>")
+                        .contains("href=\"/view/addressbooks/" + bookId + "\"")
+                        .contains("Address Book #" + bookId + " (1 buddies)"));
+    }
 }

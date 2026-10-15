@@ -7,6 +7,9 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * GUI controller. Unlike a @RestController, a plain @Controller method returns the
  * NAME of a view; Thymeleaf resolves "addressbook" to
@@ -19,6 +22,15 @@ public class AddressBookViewController {
 
     public AddressBookViewController(AddressBookRepository addressBookRepository) {
         this.addressBookRepository = addressBookRepository;
+    }
+
+    /** GET / -> homepage listing every address book, each linking to its view page. */
+    @GetMapping("/")
+    public String home(Model model) {
+        List<AddressBook> books = new ArrayList<>();
+        addressBookRepository.findAll().forEach(books::add);
+        model.addAttribute("addressBooks", books);
+        return "index";
     }
 
     /** GET /view/addressbooks/{bookId} -> HTML page listing that book's buddies. */
