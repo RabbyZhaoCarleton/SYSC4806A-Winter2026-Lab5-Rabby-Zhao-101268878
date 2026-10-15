@@ -1,0 +1,44 @@
+SYSC 4806 Lab 4 - HTTP requests used to populate and view the address books
+============================================================================
+
+Start the app (run AddressBookApplication, or "mvn spring-boot:run"), then run these
+in order. The ids assume a freshly started app (H2 is in-memory and starts empty).
+The same requests are in requests.http for IntelliJ's HTTP client (Tools > HTTP Client).
+
+These are curl commands for Git Bash / macOS / Linux. In Windows PowerShell, use
+curl.exe instead of curl, and escape the inner double quotes in the JSON.
+
+# 1. Create address book #1
+curl -X POST http://localhost:8080/addressbooks
+
+# 2. Create address book #2
+curl -X POST http://localhost:8080/addressbooks
+
+# 3. Create a new buddy directly inside address book #1 (buddy id 1)
+curl -X POST http://localhost:8080/addressbooks/1/buddies -H "Content-Type: application/json" -d '{"name":"Rabby","email":"Rabby@gmail.com","phone":"123-456-7890","address":"123 Main St, Carleton, ON"}'
+
+# 4. Create another buddy inside address book #1 (buddy id 2)
+curl -X POST http://localhost:8080/addressbooks/1/buddies -H "Content-Type: application/json" -d '{"name":"Jane","email":"Jane@gmail.com","phone":"987-654-3210","address":"456 Elm St, Toronto, ON"}'
+
+# 5. Create a stand-alone buddy that is not in any book yet (buddy id 3)
+curl -X POST http://localhost:8080/buddies -H "Content-Type: application/json" -d '{"name":"Bob","email":"Bob@gmail.com","phone":"555-555-5555","address":"789 Oak St, Ottawa, ON"}'
+
+# 6. Add the existing buddy #3 (Bob) to address book #2
+curl -X PUT http://localhost:8080/addressbooks/2/buddies/3
+
+# 7. Create another buddy inside address book #2 (buddy id 4)
+curl -X POST http://localhost:8080/addressbooks/2/buddies -H "Content-Type: application/json" -d '{"name":"Alice","email":"Alice@gmail.com","phone":"613-555-0199","address":"1125 Colonel By Dr, Ottawa, ON"}'
+
+# 8. Read everything back as JSON
+curl http://localhost:8080/addressbooks
+curl http://localhost:8080/addressbooks/1
+curl http://localhost:8080/buddies
+
+# 9. Thymeleaf HTML views (or just open these URLs in a browser)
+curl http://localhost:8080/view/addressbooks/1
+curl http://localhost:8080/view/addressbooks/2
+
+Other endpoints
+---------------
+GET    /buddies/{id}                              one buddy as JSON
+DELETE /addressbooks/{bookId}/buddies/{buddyId}   remove a buddy from a book
